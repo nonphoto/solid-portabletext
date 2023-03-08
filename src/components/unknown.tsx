@@ -1,39 +1,43 @@
+import { Show } from "solid-js";
 import type { PortableTextSolidComponents } from "../types";
 import { unknownTypeWarning } from "../warnings";
 
 const hidden = { display: "none" };
 
-export const DefaultUnknownType: PortableTextSolidComponents["unknownType"] = ({
-  value,
-  isInline,
-}) => {
-  const warning = unknownTypeWarning(value._type);
-  return isInline ? (
-    <span style={hidden}>{warning}</span>
-  ) : (
-    <div style={hidden}>{warning}</div>
+export const DefaultUnknownType: PortableTextSolidComponents["unknownType"] = (
+  props
+) => {
+  const warning = () => unknownTypeWarning(props.value._type);
+  return (
+    <Show
+      when={props.isInline}
+      fallback={<div style={hidden}>{warning()}</div>}
+    >
+      <span style={hidden}>{warning()}</span>
+    </Show>
   );
 };
 
-export const DefaultUnknownMark: PortableTextSolidComponents["unknownMark"] = ({
-  markType,
-  children,
-}) => {
-  return <span class={`unknown__pt__mark__${markType}`}>{children}</span>;
+export const DefaultUnknownMark: PortableTextSolidComponents["unknownMark"] = (
+  props
+) => {
+  return (
+    <span class={`unknown__pt__mark__${props.markType}`}>{props.children}</span>
+  );
 };
 
 export const DefaultUnknownBlockStyle: PortableTextSolidComponents["unknownBlockStyle"] =
-  ({ children }) => {
-    return <p>{children}</p>;
+  (props) => {
+    return <p>{props.children}</p>;
   };
 
-export const DefaultUnknownList: PortableTextSolidComponents["unknownList"] = ({
-  children,
-}) => {
-  return <ul>{children}</ul>;
+export const DefaultUnknownList: PortableTextSolidComponents["unknownList"] = (
+  props
+) => {
+  return <ul>{props.children}</ul>;
 };
 
 export const DefaultUnknownListItem: PortableTextSolidComponents["unknownListItem"] =
-  ({ children }) => {
-    return <li>{children}</li>;
+  (props) => {
+    return <li>{props.children}</li>;
   };

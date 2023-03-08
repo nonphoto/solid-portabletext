@@ -7,10 +7,10 @@ export const defaultLists: Record<
   "number" | "bullet",
   PortableTextListComponent
 > = {
-  number: ({ children }) => <ol>{children}</ol>,
-  bullet: ({ children }) => <ul>{children}</ul>,
+  number: (props) => <ol>{props.children}</ol>,
+  bullet: (props) => <ul>{props.children}</ul>,
 };
 
-export const DefaultListItem: PortableTextListItemComponent = ({
-  children,
-}) => <li>{children}</li>;
+export const DefaultListItem: PortableTextListItemComponent = (props) => (
+  <li>{props.children}</li>
+);

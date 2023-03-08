@@ -6,8 +6,8 @@ interface DefaultLink extends TypedObject {
   href: string;
 }
 
-const link: PortableTextMarkComponent<DefaultLink> = ({ children, value }) => (
-  <a href={value?.href}>{children}</a>
+const link: PortableTextMarkComponent<DefaultLink> = (props) => (
+  <a href={props.value?.href}>{props.children}</a>
 );
 
 const underlineStyle = { textDecoration: "underline" };
@@ -16,10 +16,10 @@ export const defaultMarks: Record<
   string,
   PortableTextMarkComponent | undefined
 > = {
-  em: ({ children }) => <em>{children}</em>,
-  strong: ({ children }) => <strong>{children}</strong>,
-  code: ({ children }) => <code>{children}</code>,
-  underline: ({ children }) => <span style={underlineStyle}>{children}</span>,
-  "strike-through": ({ children }) => <del>{children}</del>,
+  em: (props) => <em>{props.children}</em>,
+  strong: (props) => <strong>{props.children}</strong>,
+  code: (props) => <code>{props.children}</code>,
+  underline: (props) => <span style={underlineStyle}>{props.children}</span>,
+  "strike-through": (props) => <del>{props.children}</del>,
   link,
 };

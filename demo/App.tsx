@@ -1,27 +1,46 @@
-import type { Component } from 'solid-js';
+import type { Component } from "solid-js";
+import { PortableText, PortableTextComponents } from "../src";
+import { blocks } from "./fixture";
+import Code from "./components/Code";
+import CurrencyAmount from "./components/CurrencyAmount";
+import AnnotatedMap from "./components/AnnotatedMap";
+import LinkableHeader from "./components/LinkableHeadert";
+import SchnauzerList from "./components/SchnauzerList";
+import Link from "./components/Link";
+import CharacterReference from "./components/CharacterReference";
+import { hasSpeechApi, SpeechSynthesis } from "./components/SpeechSynthesis";
+import TermDefinition from "./components/TermDefinition";
 
-import logo from './logo.svg';
-import styles from './App.module.css';
+const components: PortableTextComponents = {
+  // Components for totally custom types outside the scope of Portable Text
+  types: {
+    code: Code,
+    currencyAmount: CurrencyAmount,
+    annotatedMap: AnnotatedMap,
+  },
+
+  // Overrides for specific block styles - in this case just the `h2` style
+  block: {
+    h2: LinkableHeader,
+  },
+
+  // Implements a custom component to handle the `schnauzer` list item type
+  list: {
+    schnauzer: SchnauzerList,
+  },
+
+  // Custom components for marks - note that `link` overrides the default component,
+  // while the others define components for totally custom types.
+  marks: {
+    link: Link,
+    characterReference: CharacterReference,
+    speech: hasSpeechApi ? SpeechSynthesis : undefined,
+    definition: TermDefinition,
+  },
+};
 
 const App: Component = () => {
-  return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
-    </div>
-  );
+  return <PortableText value={blocks} components={components} />;
 };
 
 export default App;
