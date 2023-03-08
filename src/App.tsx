@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import { PortableText, PortableTextComponents } from "../src";
+import { PortableText, PortableTextComponents } from "./lib";
 import { blocks } from "./fixture";
 import Code from "./components/Code";
 import CurrencyAmount from "./components/CurrencyAmount";

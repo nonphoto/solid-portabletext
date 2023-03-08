@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "start": "vite demo",
-    "dev": "vite demo",
-    "build": "vite build demo",
-    "serve": "vite preview demo"
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "license": "MIT",
   "devDependencies": {
