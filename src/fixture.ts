@@ -3,7 +3,7 @@ import type { AnnotatedMapBlock } from "./components/AnnotatedMap";
 import type { CodeBlock } from "./components/Code";
 
 const exampleCode = `
-import {PortableText, PortableTextTypeComponent} from '@portabletext/react'
+import {PortableText, PortableTextTypeComponent} from '@portabletext/solid'
 
 interface CodeBlock {
   _type: 'code'
@@ -22,7 +22,7 @@ export const blocks: (PortableTextBlock | CodeBlock | AnnotatedMapBlock)[] = [
     _key: "head",
     style: "h1",
     markDefs: [],
-    children: [{ _type: "span", text: "@portabletext/react demo" }],
+    children: [{ _type: "span", text: "@portabletext/solid demo" }],
   },
   {
     _type: "block",
@@ -170,7 +170,7 @@ export const blocks: (PortableTextBlock | CodeBlock | AnnotatedMapBlock)[] = [
     children: [
       {
         _type: "span",
-        text: "Aside from that, you can drop in pretty much any data you want, as long as you define a React component to render it. Here is a code block, highlighted by ",
+        text: "Aside from that, you can drop in pretty much any data you want, as long as you define a Solid component to render it. Here is a code block, highlighted by ",
       },
       { _type: "span", text: "react-refractor", marks: ["lllink"] },
       { _type: "span", text: ", for instance:" },
