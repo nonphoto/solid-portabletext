@@ -60,6 +60,7 @@
     "@portabletext/toolkit": "^2.0.1"
   },
   "devDependencies": {
+    "@changesets/cli": "2.26.1",
     "@portabletext/types": "2.0.2",
     "concurrently": "^7.6.0",
     "esbuild": "^0.17.4",
