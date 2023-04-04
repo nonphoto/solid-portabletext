@@ -1,34 +1,27 @@
-## Usage
+<p>
+  <img width="100%" src="https://assets.solidjs.com/banner?type=solid-portabletext&background=tiles&project=%20" alt="solid-portabletext">
+</p>
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+# solid-portabletext
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+[![pnpm](https://img.shields.io/badge/maintained%20with-pnpm-cc00ff.svg?style=for-the-badge&logo=pnpm)](https://pnpm.io/)
+
+Render Portable Text with Solid JS
+
+## Quick start
+
+Install it:
 
 ```bash
-$ npm install # or pnpm install or yarn install
+npm i solid-portabletext
+# or
+yarn add solid-portabletext
+# or
+pnpm add solid-portabletext
 ```
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+Use it:
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm dev` or `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+```tsx
+import solid-portabletext from 'solid-portabletext'
+```
