@@ -1,9 +1,9 @@
-import type { Component, JSXElement } from "solid-js";
+import type { Component, JSXElement } from 'solid-js'
 import type {
   ToolkitListNestMode,
   ToolkitPortableTextList,
   ToolkitPortableTextListItem,
-} from "@portabletext/toolkit";
+} from '@portabletext/toolkit'
 import type {
   ArbitraryTypedObject,
   PortableTextBlock,
@@ -11,7 +11,7 @@ import type {
   PortableTextListItemBlock,
   PortableTextListItemType,
   TypedObject,
-} from "@portabletext/types";
+} from '@portabletext/types'
 
 /**
  * Properties for the Portable Text Solid component
@@ -19,17 +19,17 @@ import type {
  * @template B Types that can appear in the array of blocks
  */
 export interface PortableTextProps<
-  B extends TypedObject = PortableTextBlock | ArbitraryTypedObject
+  B extends TypedObject = PortableTextBlock | ArbitraryTypedObject,
 > {
   /**
    * One or more blocks to render
    */
-  value: B | B[];
+  value: B | B[]
 
   /**
    * Solid components to use for rendering
    */
-  components?: Partial<PortableTextSolidComponents>;
+  components?: Partial<PortableTextSolidComponents>
 
   /**
    * Function to call when encountering unknown unknown types, eg blocks, marks,
@@ -38,14 +38,14 @@ export interface PortableTextProps<
    * Will print a warning message to the console by default.
    * Pass `false` to disable.
    */
-  onMissingComponent?: MissingComponentHandler | false;
+  onMissingComponent?: MissingComponentHandler | false
 
   /**
    * Determines whether or not lists are nested inside of list items (`html`)
    *
    * You rarely (if ever) need/want to customize this
    */
-  listNestingMode?: ToolkitListNestMode;
+  listNestingMode?: ToolkitListNestMode
 }
 
 /**
@@ -53,25 +53,22 @@ export interface PortableTextProps<
  *
  * @template N Node types we expect to be rendering (`PortableTextBlock` should usually be part of this)
  */
-export type PortableTextComponent<N> = Component<PortableTextComponentProps<N>>;
+export type PortableTextComponent<N> = Component<PortableTextComponentProps<N>>
 
 /**
  * Solid component type for rendering portable text blocks (paragraphs, headings, blockquotes etc)
  */
-export type PortableTextBlockComponent =
-  PortableTextComponent<PortableTextBlock>;
+export type PortableTextBlockComponent = PortableTextComponent<PortableTextBlock>
 
 /**
  * Solid component type for rendering (virtual, not part of the spec) portable text lists
  */
-export type PortableTextListComponent =
-  PortableTextComponent<SolidPortableTextList>;
+export type PortableTextListComponent = PortableTextComponent<SolidPortableTextList>
 
 /**
  * Solid component type for rendering portable text list items
  */
-export type PortableTextListItemComponent =
-  PortableTextComponent<PortableTextListItemBlock>;
+export type PortableTextListItemComponent = PortableTextComponent<PortableTextListItemBlock>
 
 /**
  * Solid component type for rendering portable text marks and/or decorators
@@ -80,17 +77,17 @@ export type PortableTextListItemComponent =
  */
 export type PortableTextMarkComponent<M extends TypedObject = any> = Component<
   PortableTextMarkComponentProps<M>
->;
+>
 
 export type PortableTextTypeComponent<V extends TypedObject = any> = Component<
   PortableTextTypeComponentProps<V>
->;
+>
 
 /**
  * Object defining the different Solid components to use for rendering various aspects
  * of Portable Text and user-provided types, where only the overrides needs to be provided.
  */
-export type PortableTextComponents = Partial<PortableTextSolidComponents>;
+export type PortableTextComponents = Partial<PortableTextSolidComponents>
 
 /**
  * Object definining the different Solid components to use for rendering various aspects
@@ -107,7 +104,7 @@ export interface PortableTextSolidComponents {
    * The object has the shape `{typeName: SolidComponent}`, where `typeName` is the value set
    * in individual `_type` attributes.
    */
-  types: Record<string, PortableTextTypeComponent | undefined>;
+  types: Record<string, PortableTextTypeComponent | undefined>
 
   /**
    * Object of Solid components that renders different types of marks that might appear in spans.
@@ -115,7 +112,7 @@ export interface PortableTextSolidComponents {
    * The object has the shape `{markName: SolidComponent}`, where `markName` is the value set
    * in individual `_type` attributes, values being stored in the parent blocks `markDefs`.
    */
-  marks: Record<string, PortableTextMarkComponent | undefined>;
+  marks: Record<string, PortableTextMarkComponent | undefined>
 
   /**
    * Object of Solid components that renders blocks with different `style` properties.
@@ -127,7 +124,7 @@ export interface PortableTextSolidComponents {
    */
   block:
     | Record<PortableTextBlockStyle, PortableTextBlockComponent | undefined>
-    | PortableTextBlockComponent;
+    | PortableTextBlockComponent
 
   /**
    * Object of Solid components used to render lists of different types (bulleted vs numbered,
@@ -141,7 +138,7 @@ export interface PortableTextSolidComponents {
    */
   list:
     | Record<PortableTextListItemType, PortableTextListComponent | undefined>
-    | PortableTextListComponent;
+    | PortableTextListComponent
 
   /**
    * Object of Solid components used to render different list item styles.
@@ -152,47 +149,44 @@ export interface PortableTextSolidComponents {
    * Can also be set to a single Solid component, which would handle list items of _any_ type.
    */
   listItem:
-    | Record<
-        PortableTextListItemType,
-        PortableTextListItemComponent | undefined
-      >
-    | PortableTextListItemComponent;
+    | Record<PortableTextListItemType, PortableTextListItemComponent | undefined>
+    | PortableTextListItemComponent
 
   /**
    * Component to use for rendering "hard breaks", eg `\n` inside of text spans
    * Will by default render a `<br />`. Pass `false` to render as-is (`\n`)
    */
-  hardBreak: Component<{}> | false;
+  hardBreak: Component<{}> | false
 
   /**
    * Solid component used when encountering a mark type there is no registered component for
    * in the `components.marks` prop.
    */
-  unknownMark: PortableTextMarkComponent;
+  unknownMark: PortableTextMarkComponent
 
   /**
    * Solid component used when encountering an object type there is no registered component for
    * in the `components.types` prop.
    */
-  unknownType: PortableTextComponent<UnknownNodeType>;
+  unknownType: PortableTextComponent<UnknownNodeType>
 
   /**
    * Solid component used when encountering a block style there is no registered component for
    * in the `components.block` prop. Only used if `components.block` is an object.
    */
-  unknownBlockStyle: PortableTextComponent<PortableTextBlock>;
+  unknownBlockStyle: PortableTextComponent<PortableTextBlock>
 
   /**
    * Solid component used when encountering a list style there is no registered component for
    * in the `components.list` prop. Only used if `components.list` is an object.
    */
-  unknownList: PortableTextComponent<SolidPortableTextList>;
+  unknownList: PortableTextComponent<SolidPortableTextList>
 
   /**
    * Solid component used when encountering a list item style there is no registered component for
    * in the `components.listItem` prop. Only used if `components.listItem` is an object.
    */
-  unknownListItem: PortableTextComponent<PortableTextListItemBlock>;
+  unknownListItem: PortableTextComponent<PortableTextListItemBlock>
 }
 
 /**
@@ -204,30 +198,30 @@ export interface PortableTextComponentProps<T> {
   /**
    * Data associated with this portable text node, eg the raw JSON value of a block/type
    */
-  value: T;
+  value: T
 
   /**
    * Index within its parent
    */
-  index: number;
+  index: number
 
   /**
    * Whether or not this node is "inline" - ie as a child of a text block,
    * alongside text spans, or a block in and of itself.
    */
-  isInline: boolean;
+  isInline: boolean
 
   /**
    * Solid child nodes of this block/component
    */
-  children?: JSXElement;
+  children?: JSXElement
 
   /**
    * Function used to render any node that might appear in a portable text array or block,
    * including virtual "toolkit"-nodes like lists and nested spans. You will rarely need
    * to use this.
    */
-  renderNode: NodeRenderer;
+  renderNode: NodeRenderer
 }
 
 /**
@@ -235,93 +229,79 @@ export interface PortableTextComponentProps<T> {
  *
  * @template T Type of data this component will receive in its `value` property
  */
-export type PortableTextTypeComponentProps<T> = Omit<
-  PortableTextComponentProps<T>,
-  "children"
->;
+export type PortableTextTypeComponentProps<T> = Omit<PortableTextComponentProps<T>, 'children'>
 
 /**
  * Props received by Portable Text mark rendering components
  *
  * @template M Shape describing the data associated with this mark, if it is an annotation
  */
-export interface PortableTextMarkComponentProps<
-  M extends TypedObject = ArbitraryTypedObject
-> {
+export interface PortableTextMarkComponentProps<M extends TypedObject = ArbitraryTypedObject> {
   /**
    * Mark definition, eg the actual data of the annotation. If the mark is a simple decorator, this will be `undefined`
    */
-  value?: M;
+  value?: M
 
   /**
    * Text content of this mark
    */
-  text: string;
+  text: string
 
   /**
    * Key for this mark. The same key can be used amongst multiple text spans within the same block, so don't rely on this for Solid keys.
    */
-  markKey?: string;
+  markKey?: string
 
   /**
    * Type of mark - ie value of `_type` in the case of annotations, or the name of the decorator otherwise - eg `em`, `italic`.
    */
-  markType: string;
+  markType: string
 
   /**
    * Solid child nodes of this mark
    */
-  children: JSXElement;
+  children: JSXElement
 
   /**
    * Function used to render any node that might appear in a portable text array or block,
    * including virtual "toolkit"-nodes like lists and nested spans. You will rarely need
    * to use this.
    */
-  renderNode: NodeRenderer;
+  renderNode: NodeRenderer
 }
 
 /**
  * Any node type that we can't identify - eg it has an `_type`,
  * but we don't know anything about its other properties
  */
-export type UnknownNodeType =
-  | { [key: string]: unknown; _type: string }
-  | TypedObject;
+export type UnknownNodeType = { [key: string]: unknown; _type: string } | TypedObject
 
 /**
  * Function that renders any node that might appear in a portable text array or block,
  * including virtual "toolkit"-nodes like lists and nested spans
  */
-export type NodeRenderer = <T extends TypedObject>(
-  props: Serializable<T>
-) => JSXElement;
+export type NodeRenderer = <T extends TypedObject>(props: Serializable<T>) => JSXElement
 
-export type NodeType =
-  | "block"
-  | "mark"
-  | "blockStyle"
-  | "listStyle"
-  | "listItemStyle";
+export type NodeType = 'block' | 'mark' | 'blockStyle' | 'listStyle' | 'listItemStyle'
 
 export type MissingComponentHandler = (
   message: string,
-  options: { type: string; nodeType: NodeType }
-) => void;
+  options: { type: string; nodeType: NodeType },
+) => void
 
 export interface Serializable<T> {
-  node: T;
-  index: number;
-  isInline: boolean;
-  renderNode: NodeRenderer;
+  node: T
+  index: number
+  isInline: boolean
+  renderNode: NodeRenderer
 }
 
 export interface SerializedBlock {
-  _key: string;
-  children: JSXElement;
-  index: number;
-  isInline: boolean;
-  node: PortableTextBlock | PortableTextListItemBlock;
+  _key: string
+  children: JSXElement
+  index: number
+  isInline: boolean
+  node: PortableTextBlock | PortableTextListItemBlock
 }
 
 // Re-exporting these as we don't want to refer to "toolkit" outside of this module
@@ -330,10 +310,10 @@ export interface SerializedBlock {
  * A virtual "list" node for Portable Text - not strictly part of Portable Text,
  * but generated by this library to ease the rendering of lists in HTML etc
  */
-export type SolidPortableTextList = ToolkitPortableTextList;
+export type SolidPortableTextList = ToolkitPortableTextList
 
 /**
  * A virtual "list item" node for Portable Text - not strictly any different from a
  * regular Portable Text Block, but we can guarantee that it has a `listItem` property.
  */
-export type SolidPortableTextListItem = ToolkitPortableTextListItem;
+export type SolidPortableTextListItem = ToolkitPortableTextListItem

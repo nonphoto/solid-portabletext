@@ -1,15 +1,15 @@
-import type { Component } from "solid-js";
-import { PortableText, PortableTextComponents } from "./lib";
-import { blocks } from "./fixture";
-import Code from "./components/Code";
-import CurrencyAmount from "./components/CurrencyAmount";
-import AnnotatedMap from "./components/AnnotatedMap";
-import LinkableHeader from "./components/LinkableHeadert";
-import SchnauzerList from "./components/SchnauzerList";
-import Link from "./components/Link";
-import CharacterReference from "./components/CharacterReference";
-import { hasSpeechApi, SpeechSynthesis } from "./components/SpeechSynthesis";
-import TermDefinition from "./components/TermDefinition";
+import type { Component } from 'solid-js'
+import { PortableText, PortableTextComponents } from '../src'
+import { blocks } from './fixture'
+import Code from './components/Code'
+import CurrencyAmount from './components/CurrencyAmount'
+import AnnotatedMap from './components/AnnotatedMap'
+import LinkableHeader from './components/LinkableHeadert'
+import SchnauzerList from './components/SchnauzerList'
+import Link from './components/Link'
+import CharacterReference from './components/CharacterReference'
+import { hasSpeechApi, SpeechSynthesis } from './components/SpeechSynthesis'
+import TermDefinition from './components/TermDefinition'
 
 const components: PortableTextComponents = {
   // Components for totally custom types outside the scope of Portable Text
@@ -37,10 +37,10 @@ const components: PortableTextComponents = {
     speech: hasSpeechApi ? SpeechSynthesis : undefined,
     definition: TermDefinition,
   },
-};
+}
 
 const App: Component = () => {
-  return <PortableText value={blocks} components={components} />;
-};
+  return <PortableText value={blocks} components={components} />
+}
 
-export default App;
+export default App

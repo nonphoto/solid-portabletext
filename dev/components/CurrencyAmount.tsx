@@ -1,3 +1,3 @@
 export default function CurrencyAmount() {
-  return <></>;
+  return <></>
 }

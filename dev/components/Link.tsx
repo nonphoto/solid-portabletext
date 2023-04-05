@@ -1,3 +1,3 @@
 export default function Link() {
-  return <></>;
+  return <></>
 }

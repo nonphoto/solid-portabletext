@@ -7,7 +7,7 @@ import {
   createContext,
   useContext,
   Show,
-} from "solid-js";
+} from 'solid-js'
 import {
   buildMarksTree,
   isPortableTextListItemBlock,
@@ -18,24 +18,24 @@ import {
   spanToPlainText,
   ToolkitNestedPortableTextSpan,
   ToolkitTextNode,
-} from "@portabletext/toolkit";
+} from '@portabletext/toolkit'
 import type {
   MissingComponentHandler,
   PortableTextProps,
   PortableTextSolidComponents,
   Serializable,
   SolidPortableTextList,
-} from "./types";
-import { isPortableTextBlock, nestLists } from "@portabletext/toolkit";
+} from './types'
+import { isPortableTextBlock, nestLists } from '@portabletext/toolkit'
 import type {
   PortableTextBlock,
   PortableTextListItemBlock,
   PortableTextMarkDefinition,
   PortableTextSpan,
   TypedObject,
-} from "@portabletext/types";
-import { mergeComponents } from "./components/merge";
-import { defaultComponents } from "./components/defaults";
+} from '@portabletext/types'
+import { mergeComponents } from './components/merge'
+import { defaultComponents } from './components/defaults'
 import {
   printWarning,
   unknownBlockStyleWarning,
@@ -43,128 +43,89 @@ import {
   unknownListStyleWarning,
   unknownMarkWarning,
   unknownTypeWarning,
-} from "./warnings";
-import { Dynamic } from "solid-js/web";
+} from './warnings'
+import { Dynamic } from 'solid-js/web'
 
 function noop() {}
 
 export const RenderContext = createContext<{
-  handleMissingComponent: MissingComponentHandler;
-  components: PortableTextSolidComponents;
-}>({ handleMissingComponent: noop, components: defaultComponents });
+  handleMissingComponent: MissingComponentHandler
+  components: PortableTextSolidComponents
+}>({ handleMissingComponent: noop, components: defaultComponents })
 
 export function PortableText<B extends TypedObject = PortableTextBlock>(
-  props: PortableTextProps<B>
+  props: PortableTextProps<B>,
 ) {
-  const handleMissingComponent = () =>
-    (props.onMissingComponent ?? printWarning) || noop;
-  const blocks = () =>
-    Array.isArray(props.value) ? props.value : [props.value];
-  const nested = () =>
-    nestLists(blocks(), props.listNestingMode ?? LIST_NEST_MODE_HTML);
+  const handleMissingComponent = () => (props.onMissingComponent ?? printWarning) || noop
+  const blocks = () => (Array.isArray(props.value) ? props.value : [props.value])
+  const nested = () => nestLists(blocks(), props.listNestingMode ?? LIST_NEST_MODE_HTML)
 
   const components = createMemo(() => {
     return props.components
       ? mergeComponents(defaultComponents, props.components)
-      : defaultComponents;
-  });
+      : defaultComponents
+  })
 
   return (
     <RenderContext.Provider
       value={{
         get components() {
-          return components();
+          return components()
         },
         get handleMissingComponent() {
-          return handleMissingComponent();
+          return handleMissingComponent()
         },
       }}
     >
       <For each={nested()}>
-        {(node, index) => (
-          <Node
-            node={node}
-            index={index()}
-            isInline={false}
-            renderNode={Node}
-          />
-        )}
+        {(node, index) => <Node node={node} index={index()} isInline={false} renderNode={Node} />}
       </For>
     </RenderContext.Provider>
-  );
+  )
 }
 
 function Node<N extends TypedObject>(props: Serializable<N>) {
-  const key = () => props.node._key || `node-${props.index}`;
+  const key = () => props.node._key || `node-${props.index}`
 
   return (
     <Switch
       fallback={
-        <CustomBlock
-          node={props.node}
-          index={props.index}
-          key={key()}
-          isInline={props.isInline}
-        />
+        <CustomBlock node={props.node} index={props.index} key={key()} isInline={props.isInline} />
       }
     >
-      <Match
-        when={isPortableTextToolkitList(props.node) ? props.node : false}
-        keyed
-      >
-        {(node) => <List node={node} index={props.index} key={key()} />}
+      <Match when={isPortableTextToolkitList(props.node) ? props.node : false} keyed>
+        {node => <List node={node} index={props.index} key={key()} />}
       </Match>
-      <Match
-        when={isPortableTextListItemBlock(props.node) ? props.node : false}
-        keyed
-      >
-        {(node) => <ListItem node={node} index={props.index} key={key()} />}
+      <Match when={isPortableTextListItemBlock(props.node) ? props.node : false} keyed>
+        {node => <ListItem node={node} index={props.index} key={key()} />}
       </Match>
-      <Match
-        when={isPortableTextToolkitSpan(props.node) ? props.node : false}
-        keyed
-      >
-        {(node) => <Span node={node} index={props.index} key={key()} />}
+      <Match when={isPortableTextToolkitSpan(props.node) ? props.node : false} keyed>
+        {node => <Span node={node} index={props.index} key={key()} />}
       </Match>
       <Match when={isPortableTextBlock(props.node) ? props.node : false} keyed>
-        {(node) => (
-          <Block
-            node={node}
-            index={props.index}
-            key={key()}
-            isInline={props.isInline}
-          />
-        )}
+        {node => <Block node={node} index={props.index} key={key()} isInline={props.isInline} />}
       </Match>
-      <Match
-        when={isPortableTextToolkitTextNode(props.node) ? props.node : false}
-        keyed
-      >
-        {(node) => <Text node={node} key={key()} />}
+      <Match when={isPortableTextToolkitTextNode(props.node) ? props.node : false} keyed>
+        {node => <Text node={node} key={key()} />}
       </Match>
     </Switch>
-  );
+  )
 }
 
-function Span(props: {
-  node: ToolkitNestedPortableTextSpan;
-  index: number;
-  key: string;
-}) {
-  const renderContext = useContext(RenderContext);
+function Span(props: { node: ToolkitNestedPortableTextSpan; index: number; key: string }) {
+  const renderContext = useContext(RenderContext)
 
   const component = () =>
-    renderContext.components.marks[props.node.markType] ??
-    renderContext.components.unknownMark;
+    renderContext.components.marks[props.node.markType] ?? renderContext.components.unknownMark
 
   createEffect(() => {
     if (component() === renderContext.components.unknownMark) {
-      renderContext.handleMissingComponent(
-        unknownMarkWarning(props.node.markType),
-        { nodeType: "mark", type: props.node.markType }
-      );
+      renderContext.handleMissingComponent(unknownMarkWarning(props.node.markType), {
+        nodeType: 'mark',
+        type: props.node.markType,
+      })
     }
-  });
+  })
 
   return (
     <Dynamic
@@ -178,44 +139,38 @@ function Span(props: {
     >
       <For each={props.node.children}>
         {(child, forIndex) => (
-          <Node
-            node={child}
-            isInline={true}
-            index={forIndex()}
-            renderNode={Node}
-          />
+          <Node node={child} isInline={true} index={forIndex()} renderNode={Node} />
         )}
       </For>
     </Dynamic>
-  );
+  )
 }
 
 function ListItem(props: {
-  node: PortableTextListItemBlock<PortableTextMarkDefinition, PortableTextSpan>;
-  index: number;
-  key: string;
+  node: PortableTextListItemBlock<PortableTextMarkDefinition, PortableTextSpan>
+  index: number
+  key: string
 }) {
-  const renderContext = useContext(RenderContext);
+  const renderContext = useContext(RenderContext)
 
   const component = () => {
-    const listItem = renderContext.components.listItem;
-    return typeof listItem === "function"
+    const listItem = renderContext.components.listItem
+    return typeof listItem === 'function'
       ? listItem
-      : listItem[props.node.listItem] ||
-          renderContext.components.unknownListItem;
-  };
+      : listItem[props.node.listItem] || renderContext.components.unknownListItem
+  }
 
   createEffect(() => {
     if (component() === renderContext.components.unknownListItem) {
-      const style = props.node.listItem || "bullet";
+      const style = props.node.listItem || 'bullet'
       renderContext.handleMissingComponent(unknownListItemStyleWarning(style), {
-        nodeType: "listItemStyle",
+        nodeType: 'listItemStyle',
         type: style,
-      });
+      })
     }
-  });
+  })
 
-  const marksTree = createMemo(() => buildMarksTree(props.node));
+  const marksTree = createMemo(() => buildMarksTree(props.node))
 
   return (
     <Dynamic
@@ -226,54 +181,40 @@ function ListItem(props: {
       renderNode={Node}
     >
       <Show
-        when={props.node.style != null && props.node.style !== "normal"}
+        when={props.node.style != null && props.node.style !== 'normal'}
         fallback={
           <For each={marksTree()}>
             {(child, forIndex) => (
-              <Node
-                node={child}
-                isInline={true}
-                index={forIndex()}
-                renderNode={Node}
-              />
+              <Node node={child} isInline={true} index={forIndex()} renderNode={Node} />
             )}
           </For>
         }
       >
-        <Node
-          node={props.node}
-          index={props.index}
-          isInline={false}
-          renderNode={Node}
-        />
+        <Node node={props.node} index={props.index} isInline={false} renderNode={Node} />
       </Show>
     </Dynamic>
-  );
+  )
 }
 
-function List(props: {
-  node: SolidPortableTextList;
-  index: number;
-  key: string;
-}) {
-  const renderContext = useContext(RenderContext);
+function List(props: { node: SolidPortableTextList; index: number; key: string }) {
+  const renderContext = useContext(RenderContext)
 
   const component = () => {
-    const list = renderContext.components.list;
-    return typeof list === "function"
+    const list = renderContext.components.list
+    return typeof list === 'function'
       ? list
-      : list[props.node.listItem] || renderContext.components.unknownList;
-  };
+      : list[props.node.listItem] || renderContext.components.unknownList
+  }
 
   createEffect(() => {
     if (component() === renderContext.components.unknownList) {
-      const style = props.node.listItem || "bullet";
+      const style = props.node.listItem || 'bullet'
       renderContext.handleMissingComponent(unknownListStyleWarning(style), {
-        nodeType: "listStyle",
+        nodeType: 'listStyle',
         type: style,
-      });
+      })
     }
-  });
+  })
 
   return (
     <Dynamic
@@ -286,11 +227,7 @@ function List(props: {
       <For each={props.node.children}>
         {(child, childIndex) => (
           <Node
-            node={
-              child._key
-                ? child
-                : { ...child, _key: `li-${props.index}-${childIndex()}` }
-            }
+            node={child._key ? child : { ...child, _key: `li-${props.index}-${childIndex()}` }}
             index={props.index}
             isInline={false}
             renderNode={Node}
@@ -298,49 +235,43 @@ function List(props: {
         )}
       </For>
     </Dynamic>
-  );
+  )
 }
 
 function Text(props: { node: ToolkitTextNode; key: string }) {
-  const renderContext = useContext(RenderContext);
+  const renderContext = useContext(RenderContext)
 
-  const hardBreak = () => renderContext.components.hardBreak || undefined;
+  const hardBreak = () => renderContext.components.hardBreak || undefined
 
   return (
-    <Show when={props.node.text === "\n"} fallback={props.node.text}>
+    <Show when={props.node.text === '\n'} fallback={props.node.text}>
       <Show when={hardBreak()} fallback="\n">
         <Dynamic component={hardBreak()!} />
       </Show>
     </Show>
-  );
+  )
 }
 
-function Block(props: {
-  node: PortableTextBlock;
-  index: number;
-  key: string;
-  isInline: boolean;
-}) {
-  const renderContext = useContext(RenderContext);
+function Block(props: { node: PortableTextBlock; index: number; key: string; isInline: boolean }) {
+  const renderContext = useContext(RenderContext)
 
-  const style = () => props.node.style ?? "normal";
+  const style = () => props.node.style ?? 'normal'
 
   const component = () =>
-    (typeof renderContext.components.block === "function"
+    (typeof renderContext.components.block === 'function'
       ? renderContext.components.block
-      : renderContext.components.block[style()]) ??
-    renderContext.components.unknownBlockStyle;
+      : renderContext.components.block[style()]) ?? renderContext.components.unknownBlockStyle
 
   createEffect(() => {
     if (component() === renderContext.components.unknownBlockStyle) {
       renderContext.handleMissingComponent(unknownBlockStyleWarning(style()), {
-        nodeType: "blockStyle",
+        nodeType: 'blockStyle',
         type: style(),
-      });
+      })
     }
-  });
+  })
 
-  const marksTree = createMemo(() => buildMarksTree(props.node));
+  const marksTree = createMemo(() => buildMarksTree(props.node))
 
   return (
     <Show when={props.key} keyed>
@@ -353,42 +284,28 @@ function Block(props: {
       >
         <For each={marksTree()}>
           {(child, forIndex) => (
-            <Node
-              node={child}
-              isInline={true}
-              index={forIndex()}
-              renderNode={Node}
-            />
+            <Node node={child} isInline={true} index={forIndex()} renderNode={Node} />
           )}
         </For>
       </Dynamic>
     </Show>
-  );
+  )
 }
 
-function CustomBlock(props: {
-  node: TypedObject;
-  index: number;
-  key: string;
-  isInline: boolean;
-}) {
-  const renderContext = useContext(RenderContext);
+function CustomBlock(props: { node: TypedObject; index: number; key: string; isInline: boolean }) {
+  const renderContext = useContext(RenderContext)
 
   const component = () =>
-    renderContext.components.types[props.node._type] ??
-    renderContext.components.unknownType;
+    renderContext.components.types[props.node._type] ?? renderContext.components.unknownType
 
   createEffect(() => {
     if (!component()) {
-      renderContext.handleMissingComponent(
-        unknownTypeWarning(props.node._type),
-        {
-          nodeType: "block",
-          type: props.node._type,
-        }
-      );
+      renderContext.handleMissingComponent(unknownTypeWarning(props.node._type), {
+        nodeType: 'block',
+        type: props.node._type,
+      })
     }
-  });
+  })
 
   return (
     <Dynamic
@@ -398,5 +315,5 @@ function CustomBlock(props: {
       index={props.index}
       renderNode={Node}
     />
-  );
+  )
 }
